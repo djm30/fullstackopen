@@ -1,0 +1,9 @@
+title Spa New Note
+
+User -> Browser: Enters 'Hello world' into textbox and presses submit
+Browser -> Browser: SendNoteToServer(note);
+Browser -> Server: POST: https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+Server -> Browser: 201 Created
+Browser  -> Browser: Notes.Push(note);
+Browser -> User: Rerender_notes() [Manipulates dom and updates it];
+

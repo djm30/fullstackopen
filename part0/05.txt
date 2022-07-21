@@ -1,0 +1,8 @@
+title Spa Load
+
+Browser -> Server: GET: https://studies.cs.helsinki.fi/exampleapp/spa
+Server -> Browser: Returns SPA.HTML
+Browser -> Server: GET: main.js
+Server -> Browser: Returns mains.js
+Browser -> Server: GET: https://studies.cs.helsinki.fi/exampleapp/data.json
+Browser -> Browser: Renders data.json

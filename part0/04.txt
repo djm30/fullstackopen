@@ -1,0 +1,13 @@
+title Form Submit Event
+
+User->Browser: Inputs 'hello world' & hits submit button
+Browser -> Server: POST: https://studies.cs.helsinki.fi/exampleapp/new_note {note: 'hello world' }
+Server->Browser: 302: Redirect -> https://studies.cs.helsinki.fi/exampleapp/notes
+Browser -> Server: GET: https://studies.cs.helsinki.fi/exampleapp/notes
+Server -> Browser: returns HTML File
+Browser -> User: Renders HTML File
+Browser -> Server: GET: main.js
+Server -> Browser: returns main.js
+Browser -> Server: [FromJs] GET: https://studies.cs.helsinki.fi/exampleapp/data.json
+Server -> Browser: returns data.json
+Browser -> User: Renders notes  
