@@ -2,17 +2,15 @@ import React from "react";
 import Notes from "./Components/Notes";
 import NewNote from "./Components/NewNote";
 import { useState, useEffect } from "react";
-import axios from "axios";
+import noteService from "./Services/notes";
 
 const App = () => {
   const [notes, setNotes] = useState([]);
   const [showAll, setShowAll] = useState(true);
 
   const hook = () => {
-    console.log("effect");
-    axios.get("http://localhost:3001/notes").then((response) => {
-      console.log("promise fulfilled");
-      setNotes(response.data);
+    noteService.getAll().then((initialNotes) => {
+      setNotes(initialNotes);
     });
   };
 
@@ -22,7 +20,7 @@ const App = () => {
   return (
     <div>
       <h1> Notes </h1>
-      <Notes notes={notes} showAll={showAll} />
+      <Notes notes={notes} setNotes={setNotes} showAll={showAll} />
       <button onClick={() => setShowAll(!showAll)}>
         {showAll ? "Show Important" : "Show All"}
       </button>

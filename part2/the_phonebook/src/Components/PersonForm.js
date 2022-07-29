@@ -1,6 +1,7 @@
 import { useState } from "react";
+import personService from "../services/person";
 
-const PersonForm = ({ persons, setPersons }) => {
+const PersonForm = ({ persons, setPersons, setMessage }) => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
 
@@ -13,19 +14,31 @@ const PersonForm = ({ persons, setPersons }) => {
       return prev;
     }, false);
     if (isAlreadyPerson) {
-      alert(
-        `The Person with the name: ${newName}, has already been added to the phonebook`
+      let updateNumber = window.confirm(
+        `${newName} is already added to the phonebook, would you like to replace the old number with a new one?`
       );
+      if (updateNumber) {
+        let person = persons.find(
+          (p) => p.name.toLowerCase() === newName.toLowerCase()
+        );
+        personService
+          .update(person.id, { ...person, number: newNumber })
+          .then((person) => {
+            setPersons([...persons.filter((p) => p.id !== person.id), person]);
+          });
+        setNewName("");
+        setNewNumber("");
+        setMessage({ isError: false, message: "Phone Number Updated" });
+      }
     } else {
-      setPersons(
-        persons.concat({
-          name: newName,
-          number: newNumber,
-          id: persons.length + 1,
-        })
-      );
+      personService
+        .create({ name: newName, number: newNumber })
+        .then((person) => {
+          setPersons((persons) => [...persons, person]);
+        });
       setNewName("");
       setNewNumber("");
+      setMessage({ isError: false, message: "Contact has been added" });
     }
   };
   const onNameChange = (event) => {

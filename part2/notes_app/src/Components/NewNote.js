@@ -1,18 +1,21 @@
 import React, { useState } from "react";
+import noteService from "../Services/notes";
 
 const NewNote = ({ notes, setNotes }) => {
   const [newNote, setNewNote] = useState("");
 
   const onSubmit = (e) => {
     e.preventDefault();
+
     const noteToAdd = {
       content: newNote,
       date: Date.now(),
       important: Math.random() < 0.5,
-      id: Math.floor(Math.random() * 10000) + 1,
     };
-    setNotes(notes.concat(noteToAdd));
-    setNewNote("");
+
+    noteService.create(noteToAdd).then((returnedNote) => {
+      setNotes(notes.concat(returnedNote));
+    });
   };
   return (
     <>
