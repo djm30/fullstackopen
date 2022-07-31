@@ -5,6 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build:ui": "rm -rf build && cd notes_app && npm run build && cp -r build ../build",
+    "deploy": "git push heroku master",
+    "logs:prod": "heroku logs --tail",
     "dev": "nodemon index.js"
   },
   "repository": {
@@ -15,7 +18,9 @@
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.18.1"
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "mongoose": "^6.5.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.19"
