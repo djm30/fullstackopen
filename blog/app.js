@@ -1,7 +1,20 @@
 const express = require("express");
 const middleware = require("./utils/middleware");
+require("express-async-errors");
 const mongoose = require("mongoose");
 const cors = require("cors");
+
+const { MONGO_URI } = require("./utils/config");
+const logger = require("./utils/logger");
+
+mongoose
+  .connect(MONGO_URI)
+  .then(() => {
+    logger.info("connected to MongoDB");
+  })
+  .catch((error) => {
+    logger.error("error connecting to MongoDB:", error.message);
+  });
 
 const blogRouter = require("./controllers/blogs");
 
