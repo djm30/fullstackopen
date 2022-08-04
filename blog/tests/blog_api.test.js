@@ -1,12 +1,15 @@
 const app = require("../app");
 const Blog = require("../models/blog");
-const helper = require("./blog_helper");
+const helper = require("./test_helper");
 const supertest = require("supertest");
 const { default: mongoose } = require("mongoose");
+const User = require("../models/user");
 
 beforeEach(async () => {
   await helper.removeBlogsFromDb();
   await helper.addBlogsToDb();
+  await helper.removeUsersFromDb();
+  await helper.addUsersToDb();
 });
 
 const baseUrl = "/api/blogs";
@@ -40,8 +43,11 @@ describe("creating blogs in the database", () => {
       likes: 7,
     };
 
+    const token = await helper.loginAndGetToken(api);
+
     const response = await api
       .post(baseUrl)
+      .set("authorization", `Bearer ${token}`)
       .send(newBlog)
       .expect(201)
       .expect("Content-Type", /application\/json/);
@@ -71,7 +77,13 @@ describe("creating blogs in the database", () => {
       url: "https://fireship.io",
     };
 
-    const response = await api.post(baseUrl).send(newBlog).expect(201);
+    const token = await helper.loginAndGetToken(api);
+
+    const response = await api
+      .post(baseUrl)
+      .set("authorization", `Bearer ${token}`)
+      .send(newBlog)
+      .expect(201);
 
     const blogInDb = await helper.getBlog(response.body.id);
     expect(blogInDb.likes).toBe(0);
@@ -81,7 +93,14 @@ describe("creating blogs in the database", () => {
     const newBlog = {
       author: "Mr Jason Firebase",
     };
-    const response = await api.post(baseUrl).send(newBlog).expect(400);
+
+    const token = await helper.loginAndGetToken(api);
+
+    const response = await api
+      .post(baseUrl)
+      .set("authorization", `Bearer ${token}`)
+      .send(newBlog)
+      .expect(400);
     console.log(response.body.error);
   });
 });
@@ -113,11 +132,25 @@ describe("updating blogs in the databse", () => {
 });
 
 describe("deleting blogs in the database", () => {
-  test("DELETE /id -> Delete a valid blog", async () => {
-    const initialBlogs = await helper.getBlogs();
-    const blogToDelete = initialBlogs[0];
+  test("DELETE /id -> Delete a valid blog with a valid user", async () => {
+    const { user: userResponse, token } = await helper.getUserAndToken(api);
 
-    await api.delete(`${baseUrl}/${blogToDelete._id}`).expect(204);
+    const blogToDelete = await new Blog({
+      title: "test",
+      url: "test",
+      user: userResponse.id.toString(),
+    }).save();
+
+    const user = await User.findById(userResponse.id);
+    user.blogs.push(blogToDelete.id.toString());
+    await user.save();
+
+    const initialBlogs = await helper.getBlogs();
+
+    const response = await api
+      .delete(`${baseUrl}/${blogToDelete._id.toString()}`)
+      .set("authorization", `Bearer ${token}`)
+      .expect(204);
 
     const afterBlogs = await helper.getBlogs();
     expect(afterBlogs.length).toBe(initialBlogs.length - 1);
