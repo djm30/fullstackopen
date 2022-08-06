@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./Blog.css";
+import PropTypes from "prop-types";
 
 const Blog = ({ blog, likePost, deletePost }) => {
   const [viewFull, setViewFull] = useState(false);
@@ -36,6 +37,12 @@ const Blog = ({ blog, likePost, deletePost }) => {
   };
 
   return <div className="container">{content()}</div>;
+};
+
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  likePost: PropTypes.func.isRequired,
+  deletePost: PropTypes.func.isRequired,
 };
 
 export default Blog;

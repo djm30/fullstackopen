@@ -1,9 +1,10 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef } from "react";
 import Blog from "./Blog";
 import loginService from "../services/login";
 import blogService from "../services/blogs";
 import BlogForm from "./BlogForm";
 import Togglable from "./Togglable";
+import PropTypes from "prop-types";
 
 const Blogs = ({ blogs, setBlogs, user, setUser, setMessage }) => {
   const onLogoutPress = () => {
@@ -76,6 +77,14 @@ const Blogs = ({ blogs, setBlogs, user, setUser, setMessage }) => {
       </div>
     </>
   );
+};
+
+Blogs.propTypes = {
+  blogs: PropTypes.array.isRequired,
+  setBlogs: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+  setUser: PropTypes.func.isRequired,
+  setMessage: PropTypes.func.isRequired,
 };
 
 export default Blogs;
