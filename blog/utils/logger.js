@@ -1,8 +1,10 @@
 const { ENV } = require("./config");
 
-const info = (...args) => {
-  if (ENV !== "test") console.log(`[INFO]`, ...args);
-};
+const info = (...args) => console.log(`[INFO]`, ...args);
+
+// const info = (...args) => {
+//   if (ENV !== "test") console.log(`[INFO]`, ...args);
+// };
 const error = (...args) => {
   if (ENV !== "test") console.log(`[ERROR]`, ...args);
 };

@@ -4,7 +4,7 @@ require("express-async-errors");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
-const { MONGO_URI } = require("./utils/config");
+const { MONGO_URI, ENV } = require("./utils/config");
 const logger = require("./utils/logger");
 
 mongoose
@@ -29,6 +29,10 @@ app.use(middleware.requestLogger);
 app.use("/api/blogs", middleware.userExtractor, blogRouter);
 app.use("/api/users", userRouter);
 app.use("/api/login", loginRouter);
+
+if (ENV === "test") {
+  app.use("/api/testing", require("./controllers/reset"));
+}
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);

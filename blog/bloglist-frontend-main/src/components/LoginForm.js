@@ -1,4 +1,4 @@
-import React, { userState, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import loginService from "../services/login";
 import blogService from "../services/blogs";
 
@@ -35,6 +35,7 @@ const LoginForm = ({ setUser, setMessage }) => {
       <div>
         <label htmlFor="username">Username</label>
         <input
+          id="username"
           name="username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
@@ -43,12 +44,15 @@ const LoginForm = ({ setUser, setMessage }) => {
       <div>
         <label htmlFor="password">Password</label>
         <input
+          id="password"
           name="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
       </div>
-      <button type="submit">Login</button>
+      <button id="login-submit" type="submit">
+        Login
+      </button>
     </form>
   );
 };

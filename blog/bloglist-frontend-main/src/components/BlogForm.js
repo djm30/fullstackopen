@@ -26,6 +26,7 @@ const BlogForm = ({ setMessage, blogs, setBlogs, toggleRef }) => {
       <div>
         <label htmlFor="title">Title</label>
         <input
+          id="title"
           name="title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
@@ -34,6 +35,7 @@ const BlogForm = ({ setMessage, blogs, setBlogs, toggleRef }) => {
       <div>
         <label htmlFor="author">Author</label>
         <input
+          id="author"
           name="author"
           value={author}
           onChange={(e) => setAuthor(e.target.value)}
@@ -42,12 +44,15 @@ const BlogForm = ({ setMessage, blogs, setBlogs, toggleRef }) => {
       <div>
         <label htmlFor="url">Url</label>
         <input
+          id="url"
           name="url"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
         />
       </div>
-      <button type="submit">Create</button>
+      <button id="blog-submit" type="submit">
+        Create
+      </button>
     </form>
   );
 };

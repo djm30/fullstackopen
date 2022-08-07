@@ -14,7 +14,7 @@ const getAll = async () => {
 
 const create = async (title, author, url) => {
   const config = {
-    headers: { Authorization: token, whocares: "fdsa" },
+    headers: { Authorization: token },
   };
 
   const reqBody = { title, author, url };
@@ -30,7 +30,13 @@ const updatePost = async (blog) => {
 };
 
 const deletePost = async (id) => {
-  const response = await axios.delete(`${baseUrl}/${id}`);
+  const config = {
+    headers: { Authorization: token },
+  };
+
+  console.log(token);
+  const response = await axios.delete(`${baseUrl}/${id}`, config);
+
   return response.data;
 };
 

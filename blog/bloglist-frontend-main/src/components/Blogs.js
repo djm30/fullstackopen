@@ -65,7 +65,7 @@ const Blogs = ({ blogs, setBlogs, user, setUser, setMessage }) => {
       </Togglable>
 
       <h4>Blogs</h4>
-      <div style={{ padding: "10px" }}>
+      <div className="blogs" style={{ padding: "10px" }}>
         {blogs.map((blog) => (
           <Blog
             blog={blog}

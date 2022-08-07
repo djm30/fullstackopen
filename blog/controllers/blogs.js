@@ -40,15 +40,17 @@ router.put("/:id", async (request, response) => {
 router.delete("/:id", async (request, response) => {
   const blogToRemove = await Blog.findById(request.params.id);
 
-  // const user = request.user;
+  const user = request.user;
 
-  // if (user.id.toString() === blogToRemove.user._id.toString()) {
-  //   await Blog.findByIdAndRemove(request.params.id);
-  //   return response.status(204).end();
-  // }
-  // return response
-  // .status(401)
-  // .json({ error: "Not authorized to delete this blog post" });
+  console.log(request);
+  console.log(blogToRemove.user);
+  if (user.id.toString() === blogToRemove.user._id.toString()) {
+    await Blog.findByIdAndRemove(request.params.id);
+    return response.status(204).end();
+  }
+  return response
+    .status(401)
+    .json({ error: "Not authorized to delete this blog post" });
 
   await Blog.findByIdAndRemove(request.params.id);
   return response.status(204).end();
