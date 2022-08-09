@@ -1,3 +1,5 @@
+import { createSlice } from "@reduxjs/toolkit";
+
 const anecdotesAtStart = [
   "If it hurts, do it more often",
   "Adding manpower to a late software project makes it later!",
@@ -19,41 +21,61 @@ const asObject = (anecdote) => {
 
 const initialState = anecdotesAtStart.map(asObject);
 
-export const addAnecdote = (content) => {
-  return {
-    type: "ADD",
-    data: {
-      content,
+const anecdoteSlice = createSlice({
+  name: "anecdotes",
+  initialState: initialState,
+  reducers: {
+    addAnecdote(state, action) {
+      return [...state, asObject(action.payload)];
     },
-  };
-};
-
-export const upvoteAnecdote = (id) => {
-  return {
-    type: "UPVOTE",
-    data: {
-      id,
-    },
-  };
-};
-
-const reducer = (state = initialState, action) => {
-  console.log("state now: ", state);
-  console.log("action", action);
-
-  switch (action.type) {
-    case "UPVOTE":
+    upvoteAnecdote(state, action) {
       const objToUpvote = state.find(
-        (anecdote) => anecdote.id === action.data.id,
+        (anecdote) => anecdote.id === action.payload,
       );
       const updatedObj = { ...objToUpvote, votes: objToUpvote.votes + 1 };
-      return state.map((a) => (a.id === action.data.id ? updatedObj : a));
+      return state.map((a) => (a.id === action.payload ? updatedObj : a));
+    },
+  },
+});
 
-    case "ADD":
-      return [...state, asObject(action.data.content)];
-    default:
-      return state;
-  }
-};
+export const { addAnecdote, upvoteAnecdote } = anecdoteSlice.actions;
+export default anecdoteSlice.reducer;
 
-export default reducer;
+// export const addAnecdote = (content) => {
+//   return {
+//     type: "ADD",
+//     data: {
+//       content,
+//     },
+//   };
+// };
+
+// export const upvoteAnecdote = (id) => {
+//   return {
+//     type: "UPVOTE",
+//     data: {
+//       id,
+//     },
+//   };
+// };
+
+// const reducer = (state = initialState, action) => {
+//   console.log("state now: ", state);
+//   console.log("action", action);
+
+//   switch (action.type) {
+//     case "UPVOTE":
+//       const objToUpvote = state.find(
+//         (anecdote) => anecdote.id === action.data.id,
+//       );
+//       const updatedObj = { ...objToUpvote, votes: objToUpvote.votes + 1 };
+//       return state.map((a) => (a.id === action.data.id ? updatedObj : a));
+
+//     case "ADD":
+//       return [...state, asObject(action.data.content)];
+//     default:
+//       return state;
+//   }
+// };
+
+// export default reducer;
