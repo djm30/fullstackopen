@@ -1,18 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import noteReducer from "./reducers/noteReducer";
-import filterReducer from "./reducers/filterReducer";
 import App from "./App";
 
 import { Provider } from "react-redux";
-import { createStore, combineReducers } from "redux";
-
-const reducer = combineReducers({
-  notes: noteReducer,
-  filter: filterReducer,
-});
-
-const store = createStore(reducer);
+import store from "./store";
 
 console.log(store.getState());
 

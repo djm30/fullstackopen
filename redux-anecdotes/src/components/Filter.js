@@ -7,7 +7,7 @@ const Filter = () => {
   const dispatch = useDispatch();
 
   return (
-    <div style={{ marginBottom: "20px" }}>
+    <div style={{ marginBottom: "10px" }}>
       <label htmlFor="filter">Filter:</label>
       <input
         name="filter"

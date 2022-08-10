@@ -1,4 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
+import {
+  getAll,
+  createAnecdote as createNew,
+  putAnecdote,
+} from "../services/anecdotes";
 
 const anecdotesAtStart = [
   "If it hurts, do it more often",
@@ -26,56 +31,41 @@ const anecdoteSlice = createSlice({
   initialState: initialState,
   reducers: {
     addAnecdote(state, action) {
-      return [...state, asObject(action.payload)];
+      return [...state, action.payload];
     },
-    upvoteAnecdote(state, action) {
-      const objToUpvote = state.find(
-        (anecdote) => anecdote.id === action.payload,
+    updateAnecote(state, action) {
+      return state.map((anecdote) =>
+        anecdote.id === action.payload.id ? action.payload : anecdote,
       );
-      const updatedObj = { ...objToUpvote, votes: objToUpvote.votes + 1 };
-      return state.map((a) => (a.id === action.payload ? updatedObj : a));
+    },
+    setAnecdotes(state, action) {
+      return action.payload;
     },
   },
 });
 
-export const { addAnecdote, upvoteAnecdote } = anecdoteSlice.actions;
+export const initialiseAnecdotes = () => {
+  return async (dispatch) => {
+    const anecdotes = await getAll();
+    dispatch(setAnecdotes(anecdotes));
+  };
+};
+
+export const createAnecdote = (content) => {
+  return async (dispatch) => {
+    const newAnecdote = await createNew(content);
+    dispatch(addAnecdote(newAnecdote));
+  };
+};
+
+export const upvoteAnecdote = (anecdote) => {
+  return async (dispatch) => {
+    const anecdoteToVote = { ...anecdote, votes: anecdote.votes + 1 };
+    const updatedAnecdote = await putAnecdote(anecdoteToVote);
+    dispatch(updateAnecote(updatedAnecdote));
+  };
+};
+
+export const { addAnecdote, setAnecdotes, updateAnecote } =
+  anecdoteSlice.actions;
 export default anecdoteSlice.reducer;
-
-// export const addAnecdote = (content) => {
-//   return {
-//     type: "ADD",
-//     data: {
-//       content,
-//     },
-//   };
-// };
-
-// export const upvoteAnecdote = (id) => {
-//   return {
-//     type: "UPVOTE",
-//     data: {
-//       id,
-//     },
-//   };
-// };
-
-// const reducer = (state = initialState, action) => {
-//   console.log("state now: ", state);
-//   console.log("action", action);
-
-//   switch (action.type) {
-//     case "UPVOTE":
-//       const objToUpvote = state.find(
-//         (anecdote) => anecdote.id === action.data.id,
-//       );
-//       const updatedObj = { ...objToUpvote, votes: objToUpvote.votes + 1 };
-//       return state.map((a) => (a.id === action.data.id ? updatedObj : a));
-
-//     case "ADD":
-//       return [...state, asObject(action.data.content)];
-//     default:
-//       return state;
-//   }
-// };
-
-// export default reducer;
