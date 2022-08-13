@@ -14,6 +14,19 @@ router.get("/:id", async (request, response) => {
   response.json(blog);
 });
 
+router.post("/comment/:id", async (request, response) => {
+  const blog = await Blog.findById(request.params.id);
+  const { comment } = request.body;
+  if (!comment) {
+    return response
+      .status(401)
+      .json({ error: "Please esnure a comment is provided" });
+  }
+  blog.comments.push(comment);
+  await blog.save();
+  return response.status(200).json(blog);
+});
+
 router.post("/", async (request, response) => {
   let { title, author, url, likes } = request.body;
 
